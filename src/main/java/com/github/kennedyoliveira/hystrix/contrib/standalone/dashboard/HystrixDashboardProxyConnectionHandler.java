@@ -249,7 +249,7 @@ public class HystrixDashboardProxyConnectionHandler implements Handler<RoutingCo
 	final String systemProxyPort = System.getProperty(Configuration.PROXY_PORT);
 	
 	final String proxyHost = systemProxyHost != null ? systemProxyHost : null;
-	final Integer proxyPort = systemProxyPort != null ? Integer.valueOf(systemProxyPort) : 80;
+	final Integer proxyPort = systemProxyPort != null ? Integer.parseInt(systemProxyPort) : 80;
     final HttpClientOptions httpClientOptions = new HttpClientOptions().setKeepAlive(false)
                                                                        .setTryUseCompression(true)
                                                                        .setMaxPoolSize(1); // just 1 because the client will be closed when the request end
