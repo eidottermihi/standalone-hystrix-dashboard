@@ -21,6 +21,16 @@ public final class Configuration {
    * Flag for disabling compression on the server, the default is {@link Boolean#FALSE}.
    */
   public static final String DISABLE_COMPRESSION = "disableCompression";
+  
+  /**
+   * Proxy host - default none.
+   */
+  public static final String PROXY_HOST = "proxyHost";
+  
+  /**
+   * Proxy port - default {@code 80}
+   */
+  public static final String PROXY_PORT = "proxyPort";
 
   /**
    * Utility class, no instances for you!

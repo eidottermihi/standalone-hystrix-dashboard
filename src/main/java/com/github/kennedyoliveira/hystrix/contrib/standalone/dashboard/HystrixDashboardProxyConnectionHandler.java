@@ -6,6 +6,7 @@ import io.vertx.core.Vertx;
 import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.*;
+import io.vertx.core.net.ProxyOptions;
 import io.vertx.core.streams.Pump;
 import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
@@ -244,10 +245,18 @@ public class HystrixDashboardProxyConnectionHandler implements Handler<RoutingCo
    * @return The {@link HttpClient} for proxying requests.
    */
   private HttpClient createHttpClient(Vertx vertx) {
+	final String systemProxyHost = System.getProperty(Configuration.PROXY_HOST);
+	final String systemProxyPort = System.getProperty(Configuration.PROXY_PORT);
+	
+	final String proxyHost = systemProxyHost != null ? systemProxyHost : null;
+	final Integer proxyPort = systemProxyPort != null ? Integer.valueOf(systemProxyPort) : 80;
     final HttpClientOptions httpClientOptions = new HttpClientOptions().setKeepAlive(false)
                                                                        .setTryUseCompression(true)
                                                                        .setMaxPoolSize(1); // just 1 because the client will be closed when the request end
-
+    if(proxyHost != null) {
+    	log.info("Using proxyHost: {}, proxyPort: {} for proxying...", proxyHost, proxyPort);
+    	httpClientOptions.setProxyOptions(new ProxyOptions().setHost(proxyHost).setPort(proxyPort)); 
+    }
     return vertx.createHttpClient(httpClientOptions);
   }
 }
